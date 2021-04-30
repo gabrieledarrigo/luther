@@ -9,12 +9,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Read number of episodes
+        id: episodes
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: ./NUMBER_OF_EPISODES.md
       - name: 'Sending SMS Notification'
         uses: twilio-labs/actions-sms@v1
         with:
           fromPhoneNumber: ${{ secrets.FROM_PHONE_NUMBER }}
           toPhoneNumber: ${{ secrets.TO_PHONE_NUMBER }}
-          message: 'How many episodes to the end of Luther TV series? https://github.com/gabrieledarrigo/luther'
+          message: 'How many episodes to the end of Luther TV series? ${{ steps.episodes.outputs.content }} https://github.com/gabrieledarrigo/luther'
         env:
           TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
           TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
